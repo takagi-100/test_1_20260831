@@ -1,6 +1,8 @@
 package jp.ac.meijou.android.s251205100;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -13,6 +15,7 @@ import jp.ac.meijou.android.s251205100.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
+    private PrefDataStore prefDataStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +29,34 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        //TextView text = findViewById(R.id.text);
-        //text.setText("Takagi");
-        //text.setText(R.string.name);
-        binding.text.setText(R.string.name);
+        binding.button.setOnClickListener(view -> {
+            var text = binding.editTextText.getText().toString();
+            binding.text.setText(R.string.name);
+        });
+        binding.editTextText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                binding.text.setText(editable.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+
+            }
+        });
+        prefDataStore = PrefDataStore.getInstance(this);
+
+
+        binding.saveButton.setOnClickListener(view -> {
+            var text = binding.editTextText.getText().toString();
+            prefDataStore.setString("name", text);
+        });
+
+
     }
 }
