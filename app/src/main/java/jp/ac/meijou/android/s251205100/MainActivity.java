@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         binding.button.setOnClickListener(view -> {
             var text = binding.editTextText.getText().toString();
             binding.text.setText(R.string.name);
+
         });
         binding.editTextText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -50,10 +51,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         prefDataStore = PrefDataStore.getInstance(this);
+        prefDataStore.getString("name")
+                .ifPresent(text -> {
+                    if("a".equals(text)){
+                        binding.text.setText("Aの画像");
+                        binding.imageView.setImageResource(R.drawable.ic_add_home);
+                    }else if("b".equals(text)){
+                        binding.text.setText("Bの画像");
+                        binding.imageView.setImageResource(R.drawable.ic_add_location);
+                    }else{
+                        binding.text.setText("知らない画像");
+                    }
+        });
+
 
 
         binding.saveButton.setOnClickListener(view -> {
             var text = binding.editTextText.getText().toString();
+            if("a".equals(text)){
+                binding.imageView.setImageResource(R.drawable.ic_android);
+            }else if("b".equals(text)){
+                binding.imageView.setImageResource(R.drawable.ic_add_location);
+            }else{
+                text = "unknown";
+            }
             prefDataStore.setString("name", text);
         });
 
